@@ -1,2 +1,10 @@
 # scookie_server
-서버
+
+## Dev
+- Node.js
+- MongoDB
+- AWS
+- Atlas
+
+## How To Start
+
