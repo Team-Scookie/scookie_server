@@ -2,8 +2,9 @@
   "name": "scookie_server",
   "version": "1.0.0",
   "description": "## Dev - Node.js - MongoDB - AWS - Atlas",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,16 @@
   },
   "homepage": "https://github.com/Team-Scookie/scookie_server#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-generator": "^4.16.1",
+    "mongoose": "^5.10.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
   },
   "devDependencies": {
     "eslint": "^7.7.0",
