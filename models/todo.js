@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-mongoose.set("useCreateIndex", true);
+const mongoose = require("mongoose")
+
+mongoose.set("useCreateIndex", true)
 
 // Define Schemes
 const todoSchema = new mongoose.Schema(
@@ -10,40 +11,35 @@ const todoSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
-);
+  },
+)
 
 // Create new todo document
-todoSchema.statics.create = function (payload) {
+todoSchema.statics.create = (payload) => {
   // this === Model
-  const todo = new this(payload);
+  const todo = new this(payload)
   // return Promise
-  return todo.save();
-};
+  return todo.save()
+}
 
 // Find All
-todoSchema.statics.findAll = function () {
-  // return promise
-  // V4부터 exec() 필요없음
-  return this.find({});
-};
+// return promise
+// V4부터 exec() 필요없음
+todoSchema.statics.findAll = () => this.find({})
 
 // Find One by todoid
-todoSchema.statics.findOneByTodoid = function (todoid) {
-  return this.findOne({ todoid });
-};
+todoSchema.statics.findOneByTodoid = (todoid) => this.findOne({ todoid })
 
 // Update by todoid
-todoSchema.statics.updateByTodoid = function (todoid, payload) {
-  // { new: true }: return the modified document rather than the original. defaults to false
-  return this.findOneAndUpdate({ todoid }, payload, { new: true });
-};
+// { new: true }: return the modified document rather than the original. defaults to false
+// eslint-disable-next-line arrow-body-style
+todoSchema.statics.updateByTodoid = (todoid, payload) => {
+  return this.findOneAndUpdate({ todoid }, payload, { new: true })
+}
 
 // Delete by todoid
-todoSchema.statics.deleteByTodoid = function (todoid) {
-  return this.remove({ todoid });
-};
+todoSchema.statics.deleteByTodoid = (todoid) => this.remove({ todoid })
 
 // Create Model & Export
 
-module.exports = mongoose.model("Todo", todoSchema);
+module.exports = mongoose.model("Todo", todoSchema)
