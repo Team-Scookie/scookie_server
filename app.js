@@ -4,8 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-// require("dotenv").config();
-
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
@@ -59,7 +57,5 @@ mongoose
   )
   .then(() => console.log("Successfully connected to mongodb"))
   .catch((e) => console.error(e));
-
-// app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 module.exports = app;
