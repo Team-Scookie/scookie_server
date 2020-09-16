@@ -13,4 +13,4 @@ const pinSchema = new mongoose.Schema(
     },
 )
 
-module.exports = mongoose.model("Pint", pinSchema)
+module.exports = mongoose.model("Pin", pinSchema)
