@@ -1,17 +1,16 @@
 const mongoose = require("mongoose")
 
-const pointSchema = new mongoose.Schema(
+const pinSchema = new mongoose.Schema(
     {
-        pin_id: { type: Number, required: true, unique: true },
-        point_id: { type: Number, required: true },
+        userId: { type: String, required: true },
         address: { type: String },
-        place_name: { type: String },
-        arrived_at: { type: String, required: true },
-        left_at: { type: String, required: true },
+        placeName: { type: String },
+        arrivedAt: { type: Date, required: true },
+        leftAt: { type: Date, required: true },
     },
     {
         timestamps: true,
     },
 )
 
-module.exports = mongoose.model("Point", pointSchema)
+module.exports = mongoose.model("Pint", pinSchema)
