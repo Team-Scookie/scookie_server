@@ -1,5 +1,5 @@
 const express = require("express")
-const Point = require('../models/point')
+const Point = require("../models/point")
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 })
 
 // Create new point document
-router.post("/test/point/", (req, res) => {
+router.post("/point/", (req, res) => {
   Point.create(req.body)
     .then((todo) => res.send(todo))
     .catch((err) => res.status(500).send(err))
