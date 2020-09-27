@@ -9,7 +9,6 @@ const bodyParser = require("body-parser")
 const dotenv = require("dotenv")
 
 const indexRouter = require("./routes/index")
-const usersRouter = require("./routes/users")
 
 const app = express()
 
@@ -33,7 +32,6 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise
 
 app.use("/", indexRouter)
-app.use("/users", usersRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -54,11 +52,11 @@ app.use((err, req, res) => {
 
 // CONNECT TO MONGODB SERVER
 mongoose
-  .connect(
-    process.env.MONGO_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-  )
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Successfully connected to mongodb"))
-  .catch((e) => console.error(e))
+  .catch(e => console.error(e))
 
 module.exports = app
