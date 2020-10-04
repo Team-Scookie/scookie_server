@@ -5,14 +5,16 @@ const router = express.Router()
 
 /* GET home page. */
 router.get("/", (req, res) => {
-  res.render("index", { title: "Express" })
+  Point.find()
+    .then(points => res.send(points))
+    .catch(err => res.status(500).send(err))
 })
 
 // Create new point document
-router.post("/point/", (req, res) => {
+router.post("/", (req, res) => {
   Point.create(req.body)
-    .then((todo) => res.send(todo))
-    .catch((err) => res.status(500).send(err))
+    .then(point => res.send(point))
+    .catch(err => res.status(500).send(err))
 })
 
 module.exports = router
