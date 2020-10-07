@@ -1,6 +1,5 @@
 const express = require("express")
 const bcrypt = require("bcrypt")
-const Todo = require("../models/todo")
 const User = require("../models/user")
 const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
 
@@ -10,7 +9,7 @@ const router = express.Router()
 
 // Find All
 router.get("/", (req, res) => {
-  Todo.findAll()
+  User.findAll()
     .then(users => {
       if (!users.length) return res.status(404).send({ err: "users not found" })
       return res.send(`find successfully: ${users}`)
@@ -57,35 +56,34 @@ router.post("/signup", async (req, res) => {
     .send(authUtil.successTrue(responseMessage.X_CREATE_SUCCESS("USER"), { signinUser, token }))
 })
 
-// Find One by todoid
-router.get("/todoid/:todoid", (req, res) => {
-  Todo.findOneByTodoid(req.params.todoid)
-    .then(todo => {
-      if (!todo) return res.status(404).send({ err: "Todo not found" })
-      return res.send(`findOne successfully: ${todo}`)
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body
+
+  if (!email || !password) {
+    return res.status(statusCode.BAD_REQUEST).send(authUtil.successFalse(responseMessage.NULL_VALUE))
+  }
+
+  const getUserInfoResult = await User.findOne({ email })
+  if (!getUserInfoResult) {
+    return res.status(statusCode.BAD_REQUEST).send(authUtil.successFalse(responseMessage.NO_X("USER")))
+  }
+
+  const isCorrectPassword =
+    getUserInfoResult.password &&
+    bcrypt.compareSync(password, getUserInfoResult.password, (err, response) => {
+      console.log(err, response)
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
     })
-    .catch(err => res.status(500).send(err))
-})
 
-// Create new todo document
-router.post("/", (req, res) => {
-  Todo.create(req.body)
-    .then(todo => res.send(todo))
-    .catch(err => res.status(500).send(err))
-})
-
-// Update by todoid
-router.put("/todoid/:todoid", (req, res) => {
-  Todo.updateByTodoid(req.params.todoid, req.body)
-    .then(todo => res.send(todo))
-    .catch(err => res.status(500).send(err))
-})
-
-// Delete by todoid
-router.delete("/todoid/:todoid", (req, res) => {
-  Todo.deleteByTodoid(req.params.todoid)
-    .then(() => res.sendStatus(200))
-    .catch(err => res.status(500).send(err))
+  if (!isCorrectPassword) {
+    return res.status(statusCode.BAD_REQUEST).send(authUtil.successFalse(responseMessage.MISS_MATCH_USER_INFO))
+  }
+  const { token } = jwt.sign(getUserInfoResult)
+  return res
+    .status(statusCode.OK)
+    .send(authUtil.successTrue(responseMessage.SIGN_IN_SUCCESS, { getUserInfoResult, token }))
 })
 
 module.exports = router
