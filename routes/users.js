@@ -56,6 +56,7 @@ router.post("/signup", async (req, res) => {
     .status(statusCode.CREATED)
     .send(authUtil.successTrue(responseMessage.X_CREATE_SUCCESS("USER"), { signinUser, token }))
 })
+
 // Find One by todoid
 router.get("/todoid/:todoid", (req, res) => {
   Todo.findOneByTodoid(req.params.todoid)
