@@ -1,5 +1,6 @@
 const express = require("express")
 const Point = require("../models/point")
+const PointController = require("../controller/pointController")
 
 const router = express.Router()
 
@@ -16,5 +17,8 @@ router.post("/", (req, res) => {
     .then(point => res.send(point))
     .catch(err => res.status(500).send(err))
 })
+
+router.put("/", PointController.updatePoint)
+router.delete("/", PointController.deletePoint)
 
 module.exports = router
