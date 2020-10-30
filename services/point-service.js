@@ -1,4 +1,4 @@
-const Point = require("../models/point")
+const Point = require("../models/point-model")
 const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const read = async () => {
