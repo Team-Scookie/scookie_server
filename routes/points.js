@@ -4,6 +4,23 @@ const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const router = express.Router()
 
+/**
+ * @swagger
+ * /points:
+ *   get:
+ *     summary: Returns Point list
+ *     tags: [Points]
+ *     responses:
+ *       200:
+ *         description: point list
+ *         schema:
+ *           type: array
+ *           properties:
+ *             points:
+ *               type: object
+ *               items:
+ *                 $ref: '#/definitions/Points'
+ */
 router.get("/", async (req, res) => {
   try {
     const { code, json } = await PointService.read()

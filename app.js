@@ -7,6 +7,8 @@ const logger = require("morgan")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const dotenv = require("dotenv")
+const swaggerUi = require("swagger-ui-express")
+const swaggerSpec = require("./swagger")
 
 const indexRouter = require("./routes/index")
 
@@ -37,6 +39,7 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise
 
 app.use("/", indexRouter)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
