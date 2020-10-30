@@ -16,7 +16,7 @@ const read = async () => {
 }
 
 const create = async body => {
-  const res = await Point.find(body)
+  const res = await Point.create(body)
   if (!res) {
     return {
       code: statusCode.INTERNAL_SERVER_ERROR,
@@ -29,8 +29,8 @@ const create = async body => {
   }
 }
 
-const update = async id => {
-  const res = await Point.update(id)
+const update = async (id, body) => {
+  const res = await Point.updateOne({ _id: id }, body)
   if (!res) {
     return {
       code: statusCode.INTERNAL_SERVER_ERROR,
