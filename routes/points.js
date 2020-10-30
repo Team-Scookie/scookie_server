@@ -1,24 +1,55 @@
 const express = require("express")
-const Point = require("../models/point")
 const PointService = require("../services/point_service")
+const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const router = express.Router()
 
-/* GET home page. */
-router.get("/", (req, res) => {
-  Point.find()
-    .then(points => res.send(points))
-    .catch(err => res.status(500).send(err))
+router.get("/", async (req, res) => {
+  try {
+    const { code, json } = await PointService.read()
+    return res.status(code).send(json)
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+  }
 })
 
-// Create new point document
-router.post("/", (req, res) => {
-  Point.create(req.body)
-    .then(point => res.send(point))
-    .catch(err => res.status(500).send(err))
+router.post("/", async (req, res) => {
+  try {
+    const { code, json } = await PointService.create(req.body)
+    return res.status(code).send(json)
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+  }
 })
 
-router.put("/", PointService.updatePoint)
-router.delete("/", PointService.deletePoint)
+router.put("/:id", async (req, res) => {
+  try {
+    const { code, json } = await PointService.update(req.params.id)
+    return res.status(code).send(json)
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+  }
+})
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const { code, json } = await PointService.deletePoint(req.params.id)
+    return res.status(code).send(json)
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+  }
+})
 
 module.exports = router
