@@ -59,6 +59,9 @@ app.use((err, req, res) => {
   res.render("error")
 })
 
+mongoose.set("useFindAndModify", false)
+mongoose.set("useCreateIndex", true)
+
 // CONNECT TO MONGODB SERVER
 mongoose
   .connect(process.env.MONGO_URI, {
