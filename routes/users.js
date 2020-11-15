@@ -4,6 +4,35 @@ const { findAllUserService, signupService, loginService } = require("../services
 
 const router = express.Router()
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User API
+ * components:
+ *   schemas:
+ *     Users:
+ *       type: object
+ *       required:
+ *         - _id
+ *         - nickname
+ *         - password
+ *         - email
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ObjectID
+ *         nickname:
+ *           type: string
+ *           description: 유저 닉네임
+ *         password:
+ *           type: string
+ *           description: 비밀번호
+ *         email:
+ *           type: string
+ *           description: 이메일
+ */
+
 // Find All
 router.get("/", async (req, res) => {
   try {
