@@ -50,22 +50,32 @@ const router = express.Router()
  *             elapsedTime:
  *               type: number
  *               description: 경과 시간
- * definitions:
+ *     Error:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         message:
+ *           type: string
  *   responses:
  *     BadRequest:
  *       description: 잘못된 요청
- *       schema:
- *         type: object
- *         properties:
- *           errorMessage:
- *             type: string
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Error'
+ *           example:
+ *             success: false
+ *             message: 잘못된 요청
  *     InternalServerError:
  *       description: 서버 에러
- *       schema:
- *         type: object
- *         properties:
- *           errorMessage:
- *             type: string
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Error'
+ *           example:
+ *             success: false
+ *             message: 서버 내부 오류
  */
 
 /**
@@ -76,14 +86,22 @@ const router = express.Router()
  *     tags: [Points]
  *     responses:
  *       200:
- *         description: point list
- *         schema:
- *           type: array
- *           properties:
- *             points:
+ *         description: 성공
+ *         content:
+ *           application/json:
+ *             schema:
  *               type: object
- *               items:
- *                 $ref: '#/definitions/Points'
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Points'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 router.get("/", async (req, res) => {
   try {
