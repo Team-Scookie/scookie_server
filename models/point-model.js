@@ -16,5 +16,4 @@ const pointSchema = new mongoose.Schema(
   },
 )
 
-mongoose.set("useCreateIndex", true)
 module.exports = mongoose.model("Point", pointSchema)
