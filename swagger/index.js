@@ -10,8 +10,12 @@ const swaggerDefinition = {
     version: "1.0.0",
     description: "Scookie 프로젝트의 API 문서입니다",
   },
-  host: "localhost:3000",
-  basePath: "/",
+  servers: [
+    {
+      description: "dev server",
+      url: "http://localhost:3000/",
+    },
+  ],
 }
 
 // Options for the swagger docs
@@ -19,19 +23,12 @@ const options = {
   // Import swaggerDefinitions
   swaggerDefinition,
   // Path to the API docs
-  apis: ["./config.js", "./routes/points.js"],
+  apis: ["./routes/*.js"],
 }
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
 const swaggerSpec = swaggerJSDoc(options)
-console.log(swaggerSpec)
 
 module.exports = swaggerSpec
 
 // https://app.swaggerhub.com/apis/Scookie/ScookieAPI/1.0.0#trial
-
-/**
- * 1. 파일 어떻게 정리할건지 찾아보기
- * 2. Point 기준으로 API 만들기
- * 3. 내일 짜잔하기
- */
