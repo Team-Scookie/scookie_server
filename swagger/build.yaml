@@ -5,9 +5,37 @@ info:
   description: Scookie 프로젝트의 API 문서입니다
   license:
     name: MIT
-host: 'http://localhost:3000'
-basePath: /
-paths: !<tag:yaml.org,2002:js/undefined> ''
+servers:
+  - description: dev server
+    url: 'http://127.0.0.1:3000'
+paths:
+  /points:
+    get:
+      summary: Get all points
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Points'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '600':
+          $ref: '#/components/responses/DBError'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     BearerAuth:
@@ -15,215 +43,63 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    User:
+    Users:
       type: object
       required:
-        - id
+        - _id
         - email
-        - name
-        - createdAt
-        - updatedAt
+        - nickname
+        - password
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
+          description: ObjectID
+        nickname:
+          type: string
+        password:
+          type: string
         email:
           type: string
-        name:
-          type: string
-        googleId:
-          type: string
-        profileImageUrl:
-          type: string
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    Workspace:
+    Points:
       type: object
       required:
-        - id
-        - name
+        - _id
+        - userId
+        - latitude
+        - longitude
         - createdAt
         - updatedAt
       properties:
-        id:
-          type: integer
-        name:
+        _id:
           type: string
-        imageUrl:
-          type: string
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    UserWorkspace:
-      type: object
-      required:
-        - createdAt
-        - updatedAt
-      properties:
+          description: ObjectID
         userId:
-          type: integer
-        workspaceId:
-          type: integer
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-    Channel:
-      type: object
-      required:
-        - name
-        - type
-        - createdAt
-        - updatedAt
-      properties:
-        name:
           type: string
-        type:
+          description: 유저 아이디
+        latitude:
           type: string
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    Section:
-      type: object
-      required:
-        - id
-        - name
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: number
-        name:
+          description: 위도
+        longitude:
           type: string
-        userId:
-          type: number
-        workspaceId:
-          type: number
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    userChannelSection:
-      type: object
-      required:
-        - id
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: number
-        userId:
-          type: number
-        channelId:
-          type: number
-        sectionId:
-          type: number
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    Thread:
-      type: object
-      required:
-        - id
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: integer
-        userId:
-          type: integer
-        channelId:
-          type: integer
-        createdAt:
-          type: datetime
-        updatedAt:
-          type: datetime
-        deletedAt:
-          type: datetime
-    Message:
-      type: object
-      required:
-        - id
-        - content
-        - isHead
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: integer
-        content:
-          type: string
-        isHead:
-          type: string
-        userId:
-          type: integer
-        threadId:
-          type: integer
+          description: 경도
         createdAt:
           type: string
+          description: 생성 시간
         updatedAt:
           type: string
-        deletedAt:
-          type: string
-    Reaction:
-      type: object
-      required:
-        - id
-        - content
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: integer
-        content:
-          type: string
-        messageId:
-          type: integer
-        userId:
-          type: integer
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        deletedAt:
-          type: string
-    File:
-      type: object
-      required:
-        - id
-        - url
-        - type
-        - createdAt
-        - updatedAt
-      properties:
-        id:
-          type: integer
-        url:
-          type: string
-        type:
-          type: string
-        messageId:
-          type: string
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        deletedAt:
-          type: string
+          description: 수정 시간
+        marker:
+          type: object
+          properties:
+            address:
+              type: string
+              description: 주소
+            placeName:
+              type: string
+              description: 장소 이름
+            elapsedTime:
+              type: number
+              description: 경과 시간
     Error:
       type: object
       properties:

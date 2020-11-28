@@ -6,10 +6,10 @@ info:
   license:
     name: MIT
 servers:
-  - description: SwaggerHub API Auto Mocking
+  - description: dev server
     url: http://127.0.0.1:3000
 paths:
-
+  $ref: "./paths/_index.yaml"
 components:
   securitySchemes:
     BearerAuth:
