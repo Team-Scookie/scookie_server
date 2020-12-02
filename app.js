@@ -7,8 +7,8 @@ const logger = require("morgan")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const dotenv = require("dotenv")
+const yaml = require("yamljs")
 const swaggerUi = require("swagger-ui-express")
-const swaggerSpec = require("./swagger")
 
 const indexRouter = require("./routes/index")
 
@@ -37,6 +37,7 @@ app.use(bodyParser.json())
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise
+const swaggerSpec = yaml.load(path.join(__dirname, "./swagger/build.yaml"))
 
 app.use("/", indexRouter)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))

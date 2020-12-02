@@ -4,7 +4,10 @@
   "description": "## Dev - Node.js - MongoDB - AWS - Atlas",
   "main": "app.js",
   "scripts": {
+    "api-docs": "swagger-cli bundle ./swagger/openapi.yaml --outfile ./swagger/build.yaml --type yaml",
+    "prestart": "npm run api-docs",
     "start": "cross-env NODE_ENV=production node ./bin/www",
+    "predev": "npm run api-docs",
     "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -33,8 +36,9 @@
     "morgan": "~1.9.1",
     "nodemon": "^2.0.4",
     "rand-token": "^1.0.1",
-    "swagger-jsdoc": "^4.3.1",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-cli": "^4.0.4",
+    "swagger-ui-express": "^4.1.4",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",

@@ -1,0 +1,4 @@
+/points:
+  $ref: "./points.yaml"
+/points/{id}:
+  $ref: "./points-id.yaml"
