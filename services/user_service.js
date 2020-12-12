@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt")
-const User = require("../models/user")
+const User = require("../models/users_model")
 const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
 
 const saltRounds = bcrypt.genSaltSync()
