@@ -5,5 +5,5 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   nickname: { type: String, required: true },
 })
-mongoose.set("useCreateIndex", true)
+
 module.exports = mongoose.model("User", userSchema)

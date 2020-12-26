@@ -4,8 +4,7 @@ const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
 
 const saltRounds = bcrypt.genSaltSync()
 
-// 모든 회원 정보 조회
-const findAllUserService = async () => {
+const findAllUser = async () => {
   const res = await User.find()
 
   if (!res) {
@@ -21,8 +20,7 @@ const findAllUserService = async () => {
   }
 }
 
-// 회원가입 서비스
-const signupService = async ({ nickname, password, email }) => {
+const signup = async ({ nickname, password, email }) => {
   if (!nickname || !password || !email) {
     return {
       code: statusCode.BAD_REQUEST,
@@ -59,8 +57,7 @@ const signupService = async ({ nickname, password, email }) => {
   }
 }
 
-// 로그인 서비스
-const loginService = async ({ email, password }) => {
+const login = async ({ email, password }) => {
   if (!email || !password) {
     return {
       code: statusCode.BAD_REQUEST,
@@ -90,4 +87,28 @@ const loginService = async ({ email, password }) => {
   }
 }
 
-module.exports = { findAllUserService, signupService, loginService }
+const updateUserInfo = async ({ id, userId, ...userInfo }) => {
+  if (!id || !userId) {
+    return {
+      code: statusCode.BAD_REQUEST,
+      json: authUtil.successFalse(responseMessage.NULL_VALUE),
+    }
+  }
+
+  if (id !== userId) {
+    return {
+      code: statusCode.UNAUTHORIZED,
+      json: authUtil.successFalse(responseMessage.UNAUTHORIZED),
+    }
+  }
+  // const getUserInfoResult = await User.findOne({ _id: id })
+  // const updateUserInfoResult = await getUserInfoResult.updateOne(userInfo)
+  const updateUserInfoResult = await User.findOneAndUpdate({ _id: id }, userInfo)
+
+  return {
+    code: statusCode.OK,
+    json: authUtil.successTrue(responseMessage.X_UPDATE_SUCCESS("User"), updateUserInfoResult),
+  }
+}
+
+module.exports = { updateUserInfo, findAllUser, signup, login }
