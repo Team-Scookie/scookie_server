@@ -2,3 +2,11 @@
   $ref: "./points.yaml"
 /points/{id}:
   $ref: "./points-id.yaml"
+/users:
+  $ref: "./users.yaml"
+/users/signup:
+  $ref: "./users-signup.yaml"
+/users/login:
+  $ref: "./users-login.yaml"
+/users/{id}:
+  $ref: "./users-id.yaml"

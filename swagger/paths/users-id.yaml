@@ -1,11 +1,11 @@
 put:
-  summary: Update point
+  summary: Update user
   tags:
-    - points
+    - users
   parameters:
     - in: path
       name: id
-      description: point id
+      description: user id
       required: true
       schema:
         type: string
@@ -15,12 +15,8 @@ put:
         schema:
           type: object
           properties:
-            latitude:
+            userInfo:
               type: string
-            longitude:
-              type: string
-            marker:
-              type: object
   responses:
     200:
       description: Created
@@ -33,33 +29,12 @@ put:
                 type: boolean
               message:
                 type: string
-delete:
-  summary: delete point
-  tags:
-    - points
-  parameters:
-    - in: path
-      name: id
-      description: point id
-      required: true
-      schema:
-        type: string
-  responses:
-    200:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              "success":
-                type: boolean
-              "message":
-                type: string
+              data:
+                $ref: "../openapi.yaml#/components/schemas/Users"
     400:
       $ref: "../openapi.yaml#/components/responses/BadRequest"
-    600:
-      $ref: "../openapi.yaml#/components/responses/DBError"
+    401:
+      $ref: "../openapi.yaml#/components/responses/Unauthorized"
     500:
       $ref: "../openapi.yaml#/components/responses/InternalServerError"
     default:
