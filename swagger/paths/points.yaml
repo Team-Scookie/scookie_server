@@ -1,5 +1,7 @@
 get:
   summary: Get all points
+  tags:
+    - points
   responses:
     200:
       description: OK
@@ -26,6 +28,8 @@ get:
       $ref: "../openapi.yaml#/components/responses/InternalServerError"
 post:
   summary: Create point
+  tags:
+    - points
   requestBody:
     content:
       application/json:
