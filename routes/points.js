@@ -1,10 +1,10 @@
 const express = require("express")
 const PointService = require("../services/point_service")
-const { authUtil, responseMessage, statusCode } = require("../tools")
+const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
 
 const router = express.Router()
 
-router.get("/", async (req, res) => {
+router.get("/", jwt.checkLogin, async (req, res) => {
   try {
     const { code, json } = await PointService.read()
     return res.status(code).send(json)
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
   }
 })
 
-router.post("/", async (req, res) => {
+router.post("/", jwt.checkLogin, async (req, res) => {
   try {
     const { code, json } = await PointService.create(req.body)
     return res.status(code).send(json)
@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
   }
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", jwt.checkLogin, async (req, res) => {
   try {
     const { code, json } = await PointService.update(req.params.id, req.body)
     return res.status(code).send(json)
@@ -40,7 +40,7 @@ router.put("/:id", async (req, res) => {
   }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", jwt.checkLogin, async (req, res) => {
   try {
     const { code, json } = await PointService.deletePoint(req.params.id)
     return res.status(code).send(json)
