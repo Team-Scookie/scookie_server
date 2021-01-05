@@ -5,7 +5,7 @@ const userService = require("../services/user_service")
 const router = express.Router()
 
 // Find All
-router.get("/", async (req, res) => {
+router.get("/", jwt.checkLogin, async (req, res) => {
   try {
     const { code, json } = await userService.findAllUser()
     return res.status(code).send(json)

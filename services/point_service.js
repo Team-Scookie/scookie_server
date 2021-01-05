@@ -1,30 +1,94 @@
-const Point = require("../models/point")
+const fetch = require("node-fetch")
+const Point = require("../models/points_model")
 const { authUtil, responseMessage, statusCode } = require("../tools")
 
-async function updatePoint(req, res) {
-  try {
-    // update 방식 findbyidupdate? findbyid save return은..?
-    await Point.update(req.body)
-    return res.status(statusCode.OK).send(authUtil.successTrue(responseMessage.X_UPDATE_SUCCESS("POINT")))
-  } catch (err) {
-    return res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+const baseUrl = "https://dapi.kakao.com/v2/local/"
+
+const read = async () => {
+  const res = await Point.find()
+  if (!res) {
+    return {
+      code: statusCode.INTERNAL_SERVER_ERROR,
+      json: authUtil.successFalse(responseMessage.NO_X("Point")),
+    }
+  }
+  return {
+    code: statusCode.OK,
+    json: authUtil.successTrue(responseMessage.X_READ_SUCCESS("Point"), res),
   }
 }
 
-async function deletePoint(req, res) {
-  try {
-    await Point.deleteOne(req.body)
-    return res.status(statusCode.OK).send(authUtil.successTrue(responseMessage.X_DELETE_SUCCESS("POINT")))
-  } catch (err) {
-    return res
-      .status(statusCode.INTERNAL_SERVER_ERROR)
-      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+const create = async body => {
+  const { longitude, latitude, elapsedTime } = body
+
+  const address = await fetch(`${baseUrl}geo/coord2address.json?input_coord=WGS84&x=${longitude}&y=${latitude}`, {
+    method: "GET",
+    headers: { Authorization: `KakaoAK ${process.env.KAKAO_KEY}` },
+  })
+  const addressResult = await address.json()
+
+  if (!addressResult.documents) {
+    return {
+      code: statusCode.BAD_REQUEST,
+      json: authUtil.successFalse(responseMessage.OUT_OF_VALUE),
+    }
+  }
+
+  body.marker = {
+    address: addressResult.documents[0].road_address.address_name,
+    placeName: "",
+    elapsedTime,
+  }
+  const res = await Point.create(body)
+  if (!res) {
+    return {
+      code: statusCode.INTERNAL_SERVER_ERROR,
+      json: authUtil.successFalse(responseMessage.X_CREATE_FAIL("Point")),
+    }
+  }
+  return {
+    code: statusCode.CREATED,
+    json: authUtil.successTrue(responseMessage.X_CREATE_SUCCESS("Point"), res),
+  }
+}
+
+const update = async (id, body) => {
+  const res = await Point.updateOne({ _id: id }, body)
+  if (!res) {
+    return {
+      code: statusCode.INTERNAL_SERVER_ERROR,
+      json: authUtil.successFalse(responseMessage.X_UPDATE_FAIL("Point")),
+    }
+  }
+  return {
+    code: statusCode.OK,
+    json: authUtil.successTrue(responseMessage.X_UPDATE_SUCCESS("Point")),
+  }
+}
+
+const deletePoint = async id => {
+  const res = await Point.deleteOne({ _id: id })
+  if (!res) {
+    return {
+      code: statusCode.INTERNAL_SERVER_ERROR,
+      json: authUtil.successFalse(responseMessage.X_DELETE_FAIL("Point")),
+    }
+  }
+  if (res.deletedCount === 0) {
+    return {
+      code: statusCode.BAD_REQUEST,
+      json: authUtil.successFalse(responseMessage.NO_X("Point")),
+    }
+  }
+  return {
+    code: statusCode.OK,
+    json: authUtil.successTrue(responseMessage.X_DELETE_SUCCESS("Point")),
   }
 }
 
 module.exports = {
-  updatePoint,
+  read,
+  create,
+  update,
   deletePoint,
 }
