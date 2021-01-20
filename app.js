@@ -39,8 +39,8 @@ app.use(bodyParser.json())
 mongoose.Promise = global.Promise
 const swaggerSpec = yaml.load(path.join(__dirname, "./swagger/build.yaml"))
 
-app.use("/", indexRouter)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use("/", indexRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
