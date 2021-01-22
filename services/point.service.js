@@ -1,5 +1,5 @@
 const fetch = require("node-fetch")
-const Point = require("../models/points_model")
+const Point = require("../models/points.model")
 const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const baseUrl = "https://dapi.kakao.com/v2/local/"

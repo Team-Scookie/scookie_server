@@ -1,6 +1,6 @@
 const express = require("express")
 const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
-const userService = require("../services/user_service")
+const userService = require("../services/user.service")
 
 const router = express.Router()
 
