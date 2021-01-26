@@ -1,5 +1,5 @@
 const express = require("express")
-const PointService = require("../services/point_service")
+const PointService = require("../services/point.service")
 const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
 
 const router = express.Router()
