@@ -19,7 +19,7 @@ const read = async () => {
 }
 
 const create = async body => {
-  const { longitude, latitude, elapsedTime } = body
+  const { longitude, latitude } = body
 
   const address = await fetch(`${baseUrl}geo/coord2address.json?input_coord=WGS84&x=${longitude}&y=${latitude}`, {
     method: "GET",
@@ -34,12 +34,13 @@ const create = async body => {
     }
   }
 
-  body.marker = {
-    address: addressResult.documents[0].road_address.address_name,
-    placeName: "",
-    elapsedTime,
-  }
-  const res = await Point.create(body)
+  // TODO: addressResult.document에 값 없는 경우 예외처리
+  const res = await Point.create({
+    ...body,
+    address: addressResult.documents[0].road_address
+      ? addressResult.documents[0].road_address.address_name
+      : addressResult.documents[0].address.address_name,
+  })
   if (!res) {
     return {
       code: statusCode.INTERNAL_SERVER_ERROR,

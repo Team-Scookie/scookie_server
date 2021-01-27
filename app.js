@@ -63,12 +63,14 @@ mongoose.set("useFindAndModify", false)
 mongoose.set("useCreateIndex", true)
 
 // CONNECT TO MONGODB SERVER
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Successfully connected to mongodb"))
-  .catch(e => console.error(e))
+if (process.env.NODE_ENV !== "test") {
+  mongoose
+    .connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => console.log("Successfully connected to mongodb"))
+    .catch(e => console.error(e))
+}
 
 module.exports = app
