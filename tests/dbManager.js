@@ -10,9 +10,7 @@ const connect = async () => {
 
   await mongoose.connect(uri, {
     useNewUrlParser: true,
-    autoReconnect: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 1000,
+    useUnifiedTopology: true,
   })
 }
 
