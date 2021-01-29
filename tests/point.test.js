@@ -57,3 +57,12 @@ describe("PUT /points/:id", () => {
     expect(res.body.data.placeName).toEqual("changed")
   })
 })
+
+describe("DELETE /points/:id", () => {
+  test("success", async () => {
+    const res = await request(app).delete(`/points/${data.point._id}`).set("token", data.token)
+
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
+  })
+})
