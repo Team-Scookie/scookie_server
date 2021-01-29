@@ -33,7 +33,14 @@ post:
               data:
                 $ref: "../openapi.yaml#/components/schemas/Points"
     400:
-      $ref: "../openapi.yaml#/components/responses/BadRequest"
+      description: 잘못된 요청 - 존재하지 않는 위치 (위도/경도)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            message: 존재하지 않는 위치
     600:
       $ref: "../openapi.yaml#/components/responses/DBError"
     500:
