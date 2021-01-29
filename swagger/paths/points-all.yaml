@@ -1,37 +1,25 @@
-post:
-  summary: Create point
+get:
+  summary: Get all points regardless of the user
   tags:
     - points
   security:
     - BearerAuth: []
-  requestBody:
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            userId:
-              type: string
-            latitude:
-              type: string
-            longitude:
-              type: string
-            marker:
-              type: object
   responses:
-    201:
-      description: Created
+    200:
+      description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              success:
+              "success":
                 type: boolean
-              message:
+              "message":
                 type: string
-              data:
-                $ref: "../openapi.yaml#/components/schemas/Points"
+              "data":
+                type: array
+                items:
+                  $ref: "../openapi.yaml#/components/schemas/Points"
     400:
       $ref: "../openapi.yaml#/components/responses/BadRequest"
     600:

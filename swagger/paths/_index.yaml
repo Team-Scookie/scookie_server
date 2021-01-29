@@ -1,5 +1,7 @@
 /points:
   $ref: "./points.yaml"
+/points/all:
+  $ref: "./points-all.yaml"
 /points/{id}:
   $ref: "./points-id.yaml"
 /users:
