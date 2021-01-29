@@ -38,7 +38,7 @@ describe("GET /points", () => {
   test("success", async () => {
     const res = await request(app).get("/points").set("token", data.token)
 
-    data.point = res.body.data[0]
+    ;[data.point] = res.body.data
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
