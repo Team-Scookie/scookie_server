@@ -38,7 +38,22 @@ describe("GET /points", () => {
   test("success", async () => {
     const res = await request(app).get("/points").set("token", data.token)
 
+    data.point = res.body.data[0]
+
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
+  })
+})
+
+describe("PUT /points/:id", () => {
+  test("success - change placeName", async () => {
+    const res = await request(app)
+      .put(`/points/${data.point._id}`)
+      .set("token", data.token)
+      .send({ placeName: "changed" })
+
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
+    expect(res.body.data.placeName).toEqual("changed")
   })
 })
