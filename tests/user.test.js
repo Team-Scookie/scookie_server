@@ -27,7 +27,7 @@ describe("POST /users/login", () => {
       email: "test@test.com",
       password: "test",
     }
-    const res = await request(app).post("/users/login").send(body).expect(200)
+    const res = await request(app).post("/users/login").send(body)
 
     data = { user: res.body.data.getUserInfoResult, token: res.body.data.token }
 

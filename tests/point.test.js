@@ -27,7 +27,7 @@ describe("POST /points", () => {
       longitude: "126.974800",
       elapsedTime: 30000,
     }
-    const res = await request(app).post("/points").set("token", data.token).send(body).expect(201)
+    const res = await request(app).post("/points").set("token", data.token).send(body)
 
     expect(res.status).toBe(201)
     expect(res.body.success).toEqual(true)
@@ -36,7 +36,7 @@ describe("POST /points", () => {
 
 describe("GET /points", () => {
   test("success", async () => {
-    const res = await request(app).get("/points").set("token", data.token).expect(200)
+    const res = await request(app).get("/points").set("token", data.token)
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
