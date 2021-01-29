@@ -4,8 +4,22 @@ const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const baseUrl = "https://dapi.kakao.com/v2/local/"
 
-const read = async () => {
+const readAll = async () => {
   const res = await Point.find()
+  if (!res) {
+    return {
+      code: statusCode.INTERNAL_SERVER_ERROR,
+      json: authUtil.successFalse(responseMessage.NO_X("Point")),
+    }
+  }
+  return {
+    code: statusCode.OK,
+    json: authUtil.successTrue(responseMessage.X_READ_SUCCESS("Point"), res),
+  }
+}
+
+const readByUser = async ({ userId }) => {
+  const res = await Point.find({ userId })
   if (!res) {
     return {
       code: statusCode.INTERNAL_SERVER_ERROR,
@@ -89,7 +103,8 @@ const deletePoint = async id => {
 }
 
 module.exports = {
-  read,
+  readAll,
+  readByUser,
   create,
   update,
   deletePoint,
