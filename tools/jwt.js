@@ -82,6 +82,23 @@ const crypto = {
     req.decoded = user
     next()
   },
+  compareUserIds: async (req, res, next) => {
+    try {
+      const id = req.params.id ? req.params.id : req.params.userId
+      const { userId } = req.decoded
+
+      if (!id || !userId) {
+        return res.status(statusCode.BAD_REQUEST).json(authUtil.successFalse(responseMessage.NULL_VALUE))
+      }
+
+      if (id !== userId) {
+        return res.status(statusCode.UNAUTHORIZED).json(authUtil.successFalse(responseMessage.UNAUTHORIZED))
+      }
+      next()
+    } catch (error) {
+      next()
+    }
+  },
 }
 
 module.exports = crypto
