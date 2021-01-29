@@ -54,7 +54,8 @@ const create = async body => {
 }
 
 const update = async (id, body) => {
-  const res = await Point.updateOne({ _id: id }, body)
+  const res = await Point.findOneAndUpdate({ _id: id }, body, { new: true })
+
   if (!res) {
     return {
       code: statusCode.INTERNAL_SERVER_ERROR,
@@ -63,7 +64,7 @@ const update = async (id, body) => {
   }
   return {
     code: statusCode.OK,
-    json: authUtil.successTrue(responseMessage.X_UPDATE_SUCCESS("Point")),
+    json: authUtil.successTrue(responseMessage.X_UPDATE_SUCCESS("Point"), res),
   }
 }
 
