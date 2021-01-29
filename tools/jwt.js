@@ -66,11 +66,13 @@ const crypto = {
     return jwt.sign(payload, process.env.TOKEN_SECRET_KEY, options)
   },
   checkLogin: async (req, res, next) => {
-    const { token } = req.headers
+    const { authorization } = req.headers
 
-    if (!token) {
+    if (!authorization) {
       return res.status(statusCode.BAD_REQUEST).json(authUtil.successFalse(responseMessage.EMPTY_TOKEN))
     }
+
+    const token = authorization.replace(/Bearer /i, "")
     const user = crypto.verify(token)
 
     if (user === -3) {
