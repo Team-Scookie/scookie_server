@@ -41,14 +41,13 @@ const create = async body => {
   })
   const addressResult = await address.json()
 
-  if (!addressResult.documents) {
+  if (!addressResult.documents.length) {
     return {
       code: statusCode.BAD_REQUEST,
-      json: authUtil.successFalse(responseMessage.OUT_OF_VALUE),
+      json: authUtil.successFalse(responseMessage.NO_X("위치")),
     }
   }
 
-  // TODO: addressResult.document에 값 없는 경우 예외처리
   const res = await Point.create({
     ...body,
     address: addressResult.documents[0].road_address
