@@ -22,7 +22,7 @@ beforeAll(async () => {
 describe("POST /points", () => {
   test("success", async () => {
     const body = {
-      userId: "test",
+      userId: data.user._id,
       latitude: "37.586786",
       longitude: "126.974800",
       elapsedTime: 30000,
@@ -34,11 +34,20 @@ describe("POST /points", () => {
   })
 })
 
-describe("GET /points", () => {
+describe("GET /points/all", () => {
   test("success", async () => {
-    const res = await request(app).get("/points").set("token", data.token)
+    const res = await request(app).get("/points/all").set("token", data.token)
 
     ;[data.point] = res.body.data
+
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
+  })
+})
+
+describe("GET /points/:id", () => {
+  test("success", async () => {
+    const res = await request(app).get(`/points/${data.user._id}`).set("token", data.token)
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
