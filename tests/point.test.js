@@ -2,8 +2,21 @@ const request = require("supertest")
 const app = require("../app")
 const dbManager = require("./dbManager.js")
 
+let data = null
+
 afterAll(() => dbManager.close())
-beforeAll(() => dbManager.connect())
+beforeAll(async () => {
+  await dbManager.connect()
+
+  const body = {
+    email: "test@test.com",
+    password: "test",
+    nickname: "test",
+  }
+
+  const res = await request(app).post("/users/signup").send(body)
+  data = { user: res.body.data.signinUser, token: res.body.data.token }
+})
 // afterEach(() => dbManager.clear())
 
 describe("POST /points", () => {
@@ -14,33 +27,42 @@ describe("POST /points", () => {
       longitude: "126.974800",
       elapsedTime: 30000,
     }
-    const response = await request(app).post("/points").send(body).expect(201)
-    console.log(response.body)
+    const res = await request(app).post("/points").set("token", data.token).send(body)
+
+    expect(res.status).toBe(201)
+    expect(res.body.success).toEqual(true)
   })
 })
 
 describe("GET /points", () => {
   test("success", async () => {
-    const response = await request(app).get("/points").expect(200)
-    console.log(response.body)
+    const res = await request(app).get("/points").set("token", data.token)
+
+    ;[data.point] = res.body.data
+
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
   })
 })
 
-/**
- * {
-      success: true,
-      message: 'Point 작성 성공',
-      data: {
-        _id: '60112e9d3b9ab628f50f6816',
-        userId: 'test',
-        latitude: '37.5078166',
-        longitude: '126.9529052',
-        elapsedTime: 30000,
-        address: '서울특별시 동작구 매봉로2가길 11',
-        createdAt: '2021-01-27T09:13:01.259Z',
-        updatedAt: '2021-01-27T09:13:01.259Z',
-        __v: 0
-      }
-    }
+describe("PUT /points/:id", () => {
+  test("success - change placeName", async () => {
+    const res = await request(app)
+      .put(`/points/${data.point._id}`)
+      .set("token", data.token)
+      .send({ placeName: "changed" })
 
- */
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
+    expect(res.body.data.placeName).toEqual("changed")
+  })
+})
+
+describe("DELETE /points/:id", () => {
+  test("success", async () => {
+    const res = await request(app).delete(`/points/${data.point._id}`).set("token", data.token)
+
+    expect(res.status).toBe(200)
+    expect(res.body.success).toEqual(true)
+  })
+})

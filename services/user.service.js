@@ -101,9 +101,10 @@ const updateUserInfo = async ({ id, userId, ...userInfo }) => {
       json: authUtil.successFalse(responseMessage.UNAUTHORIZED),
     }
   }
+
   // const getUserInfoResult = await User.findOne({ _id: id })
   // const updateUserInfoResult = await getUserInfoResult.updateOne(userInfo)
-  const updateUserInfoResult = await User.findOneAndUpdate({ _id: id }, userInfo)
+  const updateUserInfoResult = await User.findOneAndUpdate({ _id: id }, userInfo, { new: true })
 
   return {
     code: statusCode.OK,
