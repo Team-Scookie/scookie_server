@@ -6,12 +6,7 @@ const baseUrl = "https://dapi.kakao.com/v2/local/"
 
 const readAll = async () => {
   const res = await Point.find()
-  if (!res) {
-    return {
-      code: statusCode.INTERNAL_SERVER_ERROR,
-      json: authUtil.successFalse(responseMessage.NO_X("Point")),
-    }
-  }
+
   return {
     code: statusCode.OK,
     json: authUtil.successTrue(responseMessage.X_READ_SUCCESS("Point"), res),
@@ -20,12 +15,7 @@ const readAll = async () => {
 
 const readByUser = async ({ userId }) => {
   const res = await Point.find({ userId })
-  if (!res) {
-    return {
-      code: statusCode.INTERNAL_SERVER_ERROR,
-      json: authUtil.successFalse(responseMessage.NO_X("Point")),
-    }
-  }
+
   return {
     code: statusCode.OK,
     json: authUtil.successTrue(responseMessage.X_READ_SUCCESS("Point"), res),
