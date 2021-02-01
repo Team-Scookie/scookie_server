@@ -34,26 +34,24 @@ describe("POST /points", () => {
   })
 })
 
-describe("GET /points/all", () => {
+describe("GET /points", () => {
   test("success", async () => {
-    const res = await request(app).get("/points/all").set("Authorization", `Bearer ${data.token}`)
+    const res = await request(app).get("/points").set("Authorization", `Bearer ${data.token}`)
 
     ;[data.point] = res.body.data
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
   })
-})
 
-describe("GET /points/:userId", () => {
-  test("success", async () => {
-    const res = await request(app).get(`/points/${data.user._id}`).set("Authorization", `Bearer ${data.token}`)
+  test("success - query:userId", async () => {
+    const res = await request(app).get(`/points?userId=${data.user._id}`).set("Authorization", `Bearer ${data.token}`)
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
   })
 
-  test("success - 포인트가 없는 유저", async () => {
+  test("success - query:userId (포인트가 없는 유저)", async () => {
     const userBody = {
       email: "user2@test.com",
       password: "user2",
@@ -62,7 +60,7 @@ describe("GET /points/:userId", () => {
 
     const newUser = await request(app).post("/users/signup").send(userBody)
     const res = await request(app)
-      .get(`/points/${newUser.body.data.signinUser._id}`)
+      .get(`/points?userId=${newUser.body.data.signinUser._id}`)
       .set("Authorization", `Bearer ${newUser.body.data.token}`)
 
     expect(res.status).toBe(200)
