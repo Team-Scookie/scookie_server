@@ -27,6 +27,7 @@ components:
         - email
         - nickname
         - password
+        - cookieCount
       properties:
         _id:
           type: string
@@ -37,6 +38,8 @@ components:
           type: string
         email:
           type: string
+        cookieCount:
+          type: number
     Points:
       type: object
       required:
@@ -59,24 +62,40 @@ components:
         longitude:
           type: string
           description: 경도
+        address:
+          type: string
+          description: 주소
+        placeName:
+          type: string
+          description: 장소 이름
+        elapsedTime:
+          type: number
+          description: 경과 시간
         createdAt:
           type: string
           description: 생성 시간
         updatedAt:
           type: string
           description: 수정 시간
-        marker:
-          type: object
-          properties:
-            address:
-              type: string
-              description: 주소
-            placeName:
-              type: string
-              description: 장소 이름
-            elapsedTime:
-              type: number
-              description: 경과 시간
+    DailyCards:
+      type: object
+      required:
+        - _id
+        - date
+        - cookieCount
+        - password
+      properties:
+        _id:
+          type: string
+          description: ObjectID
+        date:
+          type: string
+        title:
+          type: string
+        subTitle:
+          type: string
+        cookieCount:
+          type: number
     Error:
       type: object
       properties:
