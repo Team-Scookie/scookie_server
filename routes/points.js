@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const { code, json } = await PointService.update(req.params.id, req.url.query)
+    const { code, json } = await PointService.update(req.params.id, req.body)
     return res.status(code).send(json)
   } catch (error) {
     console.error(error)
