@@ -38,7 +38,10 @@ describe("POST /users/login", () => {
 
 describe("PUT /users/:id", () => {
   test("success - change nickname", async () => {
-    const res = await request(app).put(`/users/${data.user._id}`).set("token", data.token).send({ nickname: "changed" })
+    const res = await request(app)
+      .put(`/users/${data.user._id}`)
+      .set("Authorization", `Bearer ${data.token}`)
+      .send({ nickname: "changed" })
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)
@@ -48,7 +51,7 @@ describe("PUT /users/:id", () => {
 
 describe("GET /users/", () => {
   test("success", async () => {
-    const res = await request(app).get("/users/").set("token", data.token)
+    const res = await request(app).get("/users/").set("Authorization", `Bearer ${data.token}`)
 
     expect(res.status).toBe(200)
     expect(res.body.success).toEqual(true)

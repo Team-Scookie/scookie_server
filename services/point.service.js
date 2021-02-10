@@ -1,17 +1,28 @@
 const fetch = require("node-fetch")
 const Point = require("../models/points.model")
+const User = require("../models/users.model")
 const { authUtil, responseMessage, statusCode } = require("../tools")
 
 const baseUrl = "https://dapi.kakao.com/v2/local/"
 
-const read = async () => {
-  const res = await Point.find()
-  if (!res) {
-    return {
-      code: statusCode.INTERNAL_SERVER_ERROR,
-      json: authUtil.successFalse(responseMessage.NO_X("Point")),
-    }
+const read = async (id, { userId }) => {
+  const conditions = {}
+  if (userId) {
+    if (id !== userId)
+      return {
+        code: statusCode.UNAUTHORIZED,
+        json: authUtil.successFalse(responseMessage.UNAUTHORIZED),
+      }
+    const user = await User.findOne({ _id: userId })
+    if (!user)
+      return {
+        code: statusCode.UNAUTHORIZED,
+        json: authUtil.successFalse(responseMessage.UNAUTHORIZED),
+      }
+    conditions.userId = userId
   }
+  const res = await Point.find(conditions)
+
   return {
     code: statusCode.OK,
     json: authUtil.successTrue(responseMessage.X_READ_SUCCESS("Point"), res),
@@ -27,14 +38,13 @@ const create = async body => {
   })
   const addressResult = await address.json()
 
-  if (!addressResult.documents) {
+  if (!addressResult.documents.length) {
     return {
       code: statusCode.BAD_REQUEST,
-      json: authUtil.successFalse(responseMessage.OUT_OF_VALUE),
+      json: authUtil.successFalse(responseMessage.NO_X("위치")),
     }
   }
 
-  // TODO: addressResult.document에 값 없는 경우 예외처리
   const res = await Point.create({
     ...body,
     address: addressResult.documents[0].road_address

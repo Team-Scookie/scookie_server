@@ -6,7 +6,8 @@ const router = express.Router()
 
 router.get("/", async (req, res) => {
   try {
-    const { code, json } = await PointService.read()
+    const { userId } = req.decoded
+    const { code, json } = await PointService.read(userId, req.query)
     return res.status(code).send(json)
   } catch (error) {
     console.error(error)

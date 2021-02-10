@@ -2,6 +2,8 @@ put:
   summary: Update point
   tags:
     - points
+  security:
+    - BearerAuth: []
   parameters:
     - in: path
       name: id
@@ -15,12 +17,13 @@ put:
         schema:
           type: object
           properties:
-            latitude:
+            placeName:
               type: string
-            longitude:
-              type: string
-            marker:
-              type: object
+              description: 장소 이름
+            elapsedTime:
+              type: number
+              description: 경과 시간
+
   responses:
     200:
       description: Created
@@ -33,10 +36,21 @@ put:
                 type: boolean
               message:
                 type: string
+    400:
+      $ref: "../openapi.yaml#/components/responses/BadRequest"
+    600:
+      $ref: "../openapi.yaml#/components/responses/DBError"
+    500:
+      $ref: "../openapi.yaml#/components/responses/InternalServerError"
+    default:
+      $ref: "../openapi.yaml#/components/responses/InternalServerError"
+
 delete:
   summary: delete point
   tags:
     - points
+  security:
+    - BearerAuth: []
   parameters:
     - in: path
       name: id
