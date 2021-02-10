@@ -62,7 +62,6 @@ router.get("/places", async (req, res) => {
     return res
       .status(statusCode.INTERNAL_SERVER_ERROR)
       .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
-
   }
 })
 
