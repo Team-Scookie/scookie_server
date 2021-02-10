@@ -1,6 +1,6 @@
 const express = require("express")
 const PointService = require("../services/point.service")
-const { authUtil, responseMessage, statusCode, jwt } = require("../tools")
+const { authUtil, responseMessage, statusCode, jwt, kakaoUtil } = require("../tools")
 
 const router = express.Router()
 
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const { code, json } = await PointService.update(req.params.id, req.body)
+    const { code, json } = await PointService.update(req.params.id, req.url.query)
     return res.status(code).send(json)
   } catch (error) {
     console.error(error)
@@ -50,6 +50,19 @@ router.delete("/:id", async (req, res) => {
     return res
       .status(statusCode.INTERNAL_SERVER_ERROR)
       .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+  }
+})
+
+router.get("/places", async (req, res) => {
+  try {
+    const { code, json } =  await kakaoUtil.suggestPlace(req.query.address)
+    return res.status(code).send(json)
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
+
   }
 })
 
