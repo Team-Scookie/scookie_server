@@ -37,7 +37,7 @@ describe("POST /points", () => {
 describe("GET /points", () => {
   test("success", async () => {
     const res = await request(app).get("/points").set("Authorization", `Bearer ${data.token}`)
-
+    
     ;[data.point] = res.body.data
 
     expect(res.status).toBe(200)
