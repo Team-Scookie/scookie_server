@@ -17,18 +17,6 @@ router.get("/", async (req, res) => {
   }
 })
 
-// router.get("/:userId", jwt.compareUserIds, async (req, res) => {
-//   try {
-//     const { code, json } = await PointService.readByUser({ userId: req.params.userId })
-//     return res.status(code).send(json)
-//   } catch (error) {
-//     console.error(error)
-//     return res
-//       .status(statusCode.INTERNAL_SERVER_ERROR)
-//       .send(authUtil.successFalse(responseMessage.INTERNAL_SERVER_ERROR))
-//   }
-// })
-
 router.post("/", async (req, res) => {
   try {
     const { code, json } = await PointService.create(req.body)
